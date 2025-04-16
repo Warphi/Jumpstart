@@ -4,9 +4,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-color: #3366ff;
-  width: 100vw;
   height: 100vh;
-  display: flex;
 }
 
 code {
