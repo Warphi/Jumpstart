@@ -181,6 +181,11 @@
   margin: 4px;
 }
 
+.otherMonth {
+  background-color: #BBBBBB;
+  color: #444444;
+}
+
 .calendarHeader {
   display: flex;
   flex-direction: horizontal;
