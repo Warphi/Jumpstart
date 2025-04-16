@@ -75,6 +75,16 @@ class TaskScreen extends React.Component {
     this.setState({listDate: new Date(selectedYear, selectedMonth, day)});
   }
 
+  selectPrevMonthDate = (date) => {
+    this.setState({listDate: date});
+    this.previousMonth();
+  }
+
+  selectNextMonthDate = (date) => {
+    this.setState({listDate: date});
+    this.nextMonth();
+  }
+
   render() {
     const {createTaskOpen, tasks, selectedMonth, selectedYear, listDate} = this.state;
 
@@ -94,33 +104,37 @@ class TaskScreen extends React.Component {
     const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
     const dateString = `${days[listDate.getDay()]}, ${months[listDate.getMonth()]} ${listDate.getDate()}, ${listDate.getFullYear()}`;
 
+    const weekDayLabels = days.map((day) => 
+      <p className="weekDayLabel">{day.substring(0, 3)}</p>
+    );
+    
     const prevMonthDate = (distance) => {
       var date = new Date(selectedYear, selectedMonth, 1);
       date.setDate(date.getDate() - (distance));
-      return date.getDate();
+      return date;
     }
 
     const prevMonthDayButtons = [...Array(new Date(selectedYear, selectedMonth, 1).getDay()).keys()].reverse().map((distance) =>
-      <button className="dayButton otherMonth">
-        {prevMonthDate(distance + 1)}
+      <button className={(listDate.getTime() === prevMonthDate(distance + 1).getTime()) ? "dayButton selectedDay" : "dayButton otherMonth"} onClick={() => this.selectPrevMonthDate(prevMonthDate(distance + 1))}>
+        {prevMonthDate(distance + 1).getDate()}
       </button>
     );
 
     const dayButtons = Array(new Date(selectedYear, selectedMonth + 1, 0).getDate()).keys().map((day) =>
-      <button className="dayButton" onClick={() => this.selectDate(day + 1)}>
+      <button className={(listDate.getMonth() === selectedMonth && listDate.getFullYear() === selectedYear && listDate.getDate() == (day + 1)) ? "dayButton selectedDay" : "dayButton"} onClick={() => this.selectDate(day + 1)}>
         {day + 1}
       </button>
-    )
+    );
     
    const nextMonthDate = (distance) => {
       var date = new Date(selectedYear, selectedMonth + 1, 0);
       date.setDate(date.getDate() + (distance));
-      return date.getDate();
+      return date;
     }
     
     const nextMonthDayButtons = [...Array(6 - new Date(selectedYear, selectedMonth + 1, 0).getDay()).keys()].map((distance) =>
-      <button className="dayButton otherMonth">
-        {nextMonthDate(distance + 1)}
+      <button className={(listDate.getTime() === nextMonthDate(distance + 1).getTime()) ? "dayButton selectedDay" : "dayButton otherMonth"} onClick={() => this.selectNextMonthDate(nextMonthDate(distance + 1))}>
+        {nextMonthDate(distance + 1).getDate()}
       </button>
     );
 
@@ -163,6 +177,7 @@ class TaskScreen extends React.Component {
               </div>
               <div className="calendarLine"/>
               <div className="calendar">
+                {weekDayLabels}
                 {prevMonthDayButtons}
                 {dayButtons}
                 {nextMonthDayButtons}

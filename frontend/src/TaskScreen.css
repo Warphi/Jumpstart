@@ -171,6 +171,14 @@
   border-radius: 15px;
 }
 
+.weekDayLabel {
+  text-align: center;
+  font-size: 22px;
+  font-weight: 450;
+  margin: 5px;
+  color: #112255;
+}
+
 .dayButton {
   aspect-ratio: 1;
   background-color: white;
@@ -179,6 +187,12 @@
   font-size: 20px;
   color: #112255;
   margin: 4px;
+}
+
+.selectedDay {
+  background-color: #3366ff;
+  color: white;
+  border-radius: 20px;
 }
 
 .otherMonth {
