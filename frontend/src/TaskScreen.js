@@ -35,16 +35,16 @@ class TaskScreen extends React.Component {
     });
   }
 
-  componentDidMount() {
+  componentDidMount() { // Get tasks from user
     this.getHabits();
   }
 
-  closeWindow = () => {
+  closeWindow = () => { // Close the create task window and refresh tasks
     this.setState({createTaskOpen: false});
     this.getHabits();
   }
 
-  previousMonth = () => {
+  previousMonth = () => { // Move back a month on the calendar
     const {selectedMonth, selectedYear} = this.state;
     if (selectedMonth === 0) {
       this.setState({
@@ -57,7 +57,7 @@ class TaskScreen extends React.Component {
     }
   }
 
-  nextMonth = () => {
+  nextMonth = () => { // Move forward a month on the calendar
     const {selectedMonth, selectedYear} = this.state;
     if (selectedMonth === 11) {
       this.setState({
@@ -70,17 +70,17 @@ class TaskScreen extends React.Component {
     }
   }
 
-  selectDate = (day) => {
+  selectDate = (day) => { // When a date for the current month is selected on the calendar
     const {selectedMonth, selectedYear} = this.state;
     this.setState({listDate: new Date(selectedYear, selectedMonth, day)});
   }
 
-  selectPrevMonthDate = (date) => {
+  selectPrevMonthDate = (date) => { // When a date for the previous month is selected on the calendar
     this.setState({listDate: date});
     this.previousMonth();
   }
 
-  selectNextMonthDate = (date) => {
+  selectNextMonthDate = (date) => { // When a date for the next month is selected on the calendar
     this.setState({listDate: date});
     this.nextMonth();
   }
@@ -88,7 +88,7 @@ class TaskScreen extends React.Component {
   render() {
     const {createTaskOpen, tasks, selectedMonth, selectedYear, listDate} = this.state;
 
-    const taskDivs = tasks.map((task) => 
+    const taskDivs = tasks.map((task) => // Box for each task in the list
       <div className="task">
         <p className="taskInfo">
           Task: {task.name}<br/>
@@ -103,12 +103,13 @@ class TaskScreen extends React.Component {
     const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
     const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
     const dateString = `${days[listDate.getDay()]}, ${months[listDate.getMonth()]} ${listDate.getDate()}, ${listDate.getFullYear()}`;
+    // dateString shows the current date at the top of the task list
 
     const weekDayLabels = days.map((day) => 
       <p className="weekDayLabel">{day.substring(0, 3)}</p>
-    );
+    ); // Each of the labels for days of the week on the calendar
     
-    const prevMonthDate = (distance) => {
+    const prevMonthDate = (distance) => { // Get date by backtracking a certain number of days from the first day of the current month
       var date = new Date(selectedYear, selectedMonth, 1);
       date.setDate(date.getDate() - (distance));
       return date;
@@ -118,15 +119,15 @@ class TaskScreen extends React.Component {
       <button className={(listDate.getTime() === prevMonthDate(distance + 1).getTime()) ? "dayButton selectedDay" : "dayButton otherMonth"} onClick={() => this.selectPrevMonthDate(prevMonthDate(distance + 1))}>
         {prevMonthDate(distance + 1).getDate()}
       </button>
-    );
+    ); // Each of the gray days on the calendar from the previous month
 
     const dayButtons = Array(new Date(selectedYear, selectedMonth + 1, 0).getDate()).keys().map((day) =>
       <button className={(listDate.getMonth() === selectedMonth && listDate.getFullYear() === selectedYear && listDate.getDate() == (day + 1)) ? "dayButton selectedDay" : "dayButton"} onClick={() => this.selectDate(day + 1)}>
         {day + 1}
       </button>
-    );
+    ); // Each of the normal days on the calendar for the current month
     
-   const nextMonthDate = (distance) => {
+   const nextMonthDate = (distance) => { // Get date by moving forward a certain number of days from the last day of the current month
       var date = new Date(selectedYear, selectedMonth + 1, 0);
       date.setDate(date.getDate() + (distance));
       return date;
@@ -136,7 +137,7 @@ class TaskScreen extends React.Component {
       <button className={(listDate.getTime() === nextMonthDate(distance + 1).getTime()) ? "dayButton selectedDay" : "dayButton otherMonth"} onClick={() => this.selectNextMonthDate(nextMonthDate(distance + 1))}>
         {nextMonthDate(distance + 1).getDate()}
       </button>
-    );
+    ); // Each of the gray days on the calendar from the next month
 
     return (
       <div className="taskScreen">
