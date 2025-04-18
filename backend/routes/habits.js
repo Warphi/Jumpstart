@@ -22,6 +22,7 @@ const authenticate = (req, res, next) => {
 // POST /habits (create a habit)
 router.post('/', authenticate, async (req, res) => {
     const { name, priority, description, repeats, date } = req.body;
+    date.setUTCHours(0, 0, 0, 0);
 
     try {
         const newHabit = await Habit.create({

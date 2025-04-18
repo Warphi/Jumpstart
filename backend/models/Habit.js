@@ -20,7 +20,6 @@ const habit = new mongoose.Schema({
     }],
     date: {
         type: Date,
-        default: Date.now,
     },
     completedDates: [{
         type: Date,
