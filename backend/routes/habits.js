@@ -21,8 +21,7 @@ const authenticate = (req, res, next) => {
 
 // POST /habits (create a habit)
 router.post('/', authenticate, async (req, res) => {
-    const { name, priority, description, repeats, date } = req.body;
-    date.setUTCHours(0, 0, 0, 0);
+    const { name, priority, description, repeats, dateTime } = req.body;
 
     try {
         const newHabit = await Habit.create({
@@ -30,7 +29,7 @@ router.post('/', authenticate, async (req, res) => {
             priority,
             description,
             repeats,
-            date,
+            dateTime,
             userId: req.userId,
             completedDates: []
         });
@@ -74,8 +73,12 @@ router.get('/', authenticate, async (req, res) => {
 // GET /habits/day/:date (get all habits under user on <date>)
 router.get('/day/:date', authenticate, async (req, res) => {
     try {
-        const userDate = new Date(req.params.date);
-        userDate.setUTCHours(0, 0, 0, 0);
+        const userDate = new Date(req.params.date + "T00:00:00");
+        const endDate = new Date(userDate);
+        endDate.setUTCDate(endDate.getUTCDate() + 1);
+        console.log(userDate);
+        console.log(endDate);
+
         if (isNaN(userDate.getTime())) {
             return res.status(400).json({ error: 'Invalid date format' }); // 400 is bad request
         }
@@ -88,13 +91,14 @@ router.get('/day/:date', authenticate, async (req, res) => {
         const habits = await Habit.find({
             userId: req.userId,
             $or: [
-                { date: userDate },
+                { dateTime: { $gte: userDate, $lt: endDate } },
                 { repeats: dayOfWeek }
             ]
         });
 
         res.status(200).json({ habits }); // 200 is OK
     } catch (err) {
+        console.error(err);
         res.status(500).json({ error: 'Error fetching habits.' }); // 500 is internal server error
     }
 })

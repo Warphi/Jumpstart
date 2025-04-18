@@ -18,7 +18,7 @@ const habit = new mongoose.Schema({
         type: String,
         enum: ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'],
     }],
-    date: {
+    dateTime: {
         type: Date,
     },
     completedDates: [{
