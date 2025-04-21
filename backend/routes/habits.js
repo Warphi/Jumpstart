@@ -21,7 +21,7 @@ const authenticate = (req, res, next) => {
 
 // POST /habits (create a habit)
 router.post('/', authenticate, async (req, res) => {
-    const { name, priority, description, repeats, dateTime, completeBy } = req.body;
+    const { name, priority, description, repeats, date, startBy, completeBy } = req.body;
 
     try {
         const newHabit = await Habit.create({
@@ -29,7 +29,8 @@ router.post('/', authenticate, async (req, res) => {
             priority,
             description,
             repeats,
-            dateTime,
+            date,
+            startBy,
             completeBy,
             userId: req.userId,
             completedDates: []
@@ -74,7 +75,7 @@ router.get('/', authenticate, async (req, res) => {
 // GET /habits/day/:date (get all habits under user on <date>)
 router.get('/day/:date', authenticate, async (req, res) => {
     try {
-        const userDate = new Date(req.params.date + "T00:00:00");
+        const userDate = new Date(req.params.date);
         const endDate = new Date(userDate);
         endDate.setUTCDate(endDate.getUTCDate() + 1);
 
@@ -90,8 +91,8 @@ router.get('/day/:date', authenticate, async (req, res) => {
         const habits = await Habit.find({
             userId: req.userId,
             $or: [
-                { dateTime: { $gte: userDate, $lt: endDate } },
-                { repeats: dayOfWeek }
+                { date: { $gte: userDate, $lt: endDate } },
+                { repeats: dayOfWeek, date: { $lte: userDate } }
             ]
         });
 
