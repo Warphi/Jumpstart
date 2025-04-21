@@ -24,7 +24,8 @@ class Register extends React.Component {
           value: "",
           error: null,
         },
-      }
+      },
+      apiError: "",
     }
   }
 
@@ -68,7 +69,9 @@ class Register extends React.Component {
         }),
       }).then(response => {
         if (!response.ok) {
-          throw new Error(`HTTP error status: ${response.status}`);
+          return response.json().then(data => {
+            this.setState({apiError: data.error});
+          });
         }
         return response.json();
       }).then(() => {
@@ -90,10 +93,10 @@ class Register extends React.Component {
           sessionStorage.setItem("auth_token", data.token);
           this.props.navigate("/app"); // Sign in if no errors
         }).catch(error => {
-          alert(error);
+          console.log(error);
         });
       }).catch(error => {
-        alert(error);
+        console.log(error);
       });
     }
   }
@@ -103,7 +106,7 @@ class Register extends React.Component {
   }
 
   render() {
-    const {fields} = this.state;
+    const {fields, apiError} = this.state;
     return (
       <>
         <div className="header">
@@ -149,7 +152,10 @@ class Register extends React.Component {
             }}/>
             <p className="loginError">{fields.confirmPassword.error}</p>
           </div>
+          <div>
           <button className="createAccount" onClick={this.submit}>Create Account</button>
+            <p className="apiError">{apiError}</p>
+          </div>
           <p className="loginInfo">Already have an account? <b className="linkText" onClick={this.login}>Sign In</b></p>
         </div>
       </>
