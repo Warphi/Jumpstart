@@ -21,6 +21,9 @@ const habit = new mongoose.Schema({
     dateTime: {
         type: Date,
     },
+    completeBy: {
+        type: Date,
+    },
     completedDates: [{
         type: Date,
         default: [],

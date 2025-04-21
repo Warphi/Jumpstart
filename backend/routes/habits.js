@@ -21,7 +21,7 @@ const authenticate = (req, res, next) => {
 
 // POST /habits (create a habit)
 router.post('/', authenticate, async (req, res) => {
-    const { name, priority, description, repeats, dateTime } = req.body;
+    const { name, priority, description, repeats, dateTime, completeBy } = req.body;
 
     try {
         const newHabit = await Habit.create({
@@ -30,6 +30,7 @@ router.post('/', authenticate, async (req, res) => {
             description,
             repeats,
             dateTime,
+            completeBy,
             userId: req.userId,
             completedDates: []
         });
@@ -76,8 +77,6 @@ router.get('/day/:date', authenticate, async (req, res) => {
         const userDate = new Date(req.params.date + "T00:00:00");
         const endDate = new Date(userDate);
         endDate.setUTCDate(endDate.getUTCDate() + 1);
-        console.log(userDate);
-        console.log(endDate);
 
         if (isNaN(userDate.getTime())) {
             return res.status(400).json({ error: 'Invalid date format' }); // 400 is bad request
