@@ -72,6 +72,10 @@ class Login extends React.Component {
     this.props.navigate("/register");
   }
 
+  forgotPassword = () => { // When Forgot Password is clicked
+    this.props.navigate("/forgotpassword");
+  }
+
   render() {
     const {fields, apiError} = this.state;
     return (
@@ -105,7 +109,8 @@ class Login extends React.Component {
             <button className="createAccount" onClick={this.submit}>Sign In</button>
             <p className="apiError">{apiError}</p>
           </div>
-          <p className="loginInfo">Don't have an account? <b className="linkText" onClick={this.register}>Sign Up</b></p>
+          <p className="loginInfo bottomText">Don't have an account? <b className="linkText" onClick={this.register}>Sign Up</b></p>
+          <p className="loginInfo bottomText"><b className="linkText" onClick={this.forgotPassword}>Forgot Password?</b></p>
         </div>
       </>
     )

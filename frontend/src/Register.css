@@ -1,6 +1,6 @@
 .login {
   width: 540px;
-  height: 500px;
+  height: 510px;
   background-color: white;
   position: absolute;
   left: 50%;
@@ -14,6 +14,16 @@
 
 .register {
   height: 695px;
+}
+
+.forgotPassword {
+  height: 400px;
+  padding-top: 35px;
+}
+
+.changePassword {
+  height: 440px;
+  padding-top: 30px;
 }
 
 .welcome {
@@ -32,6 +42,10 @@
 
 .loginInfo {
   color: #112255;
+}
+
+.bottomText {
+  margin-bottom: -10px;
 }
 
 p {
@@ -77,7 +91,7 @@ input {
 
 .createAccount {
   margin-top: 11px;
-  margin-bottom: 30px;
+  margin-bottom: 20px;
   width: 210px;
   height: 48px;
   background-color: #112255;
@@ -96,7 +110,7 @@ input {
 
 .apiError {
   color: red;
-  margin-top: -15px;
+  margin-top: -10px;
   position: absolute;
   width: 100%;
   left: 0;

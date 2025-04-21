@@ -5,6 +5,8 @@ import './index.css';
 import Register from './Register';
 import TaskScreen from './TaskScreen';
 import Login from './Login';
+import ForgotPassword from './ForgotPassword';
+import ChangePassword from './ChangePassword';
 import reportWebVitals from './reportWebVitals';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -18,6 +20,8 @@ root.render(
         <Route path="/register" element={<Register />}/>
         <Route path="/app" element={<TaskScreen />}/>
         <Route index element={<Login />}/>
+        <Route path="/forgotpassword" element={<ForgotPassword />}/>
+        <Route path="/changepassword/:auth" element={<ChangePassword />}/>
       </Routes>
     </BrowserRouter>
   </React.StrictMode>
