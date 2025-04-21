@@ -64,6 +64,7 @@ class Register extends React.Component {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
+          name: fields.userName.value,
           email: fields.email.value,
           password: fields.password.value,
         }),

@@ -14,6 +14,7 @@ class TaskScreen extends React.Component {
       selectedMonth: date.getMonth(),
       selectedYear: date.getFullYear(),
       listDate: date,
+      userName: "",
     }
   }
 
@@ -35,8 +36,27 @@ class TaskScreen extends React.Component {
     });
   }
 
-  componentDidMount() { // Get tasks from user
+  getName = () => { // Make call to backend for getting user's name
+    fetch("http://localhost:5000/auth/user", {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${sessionStorage.getItem("auth_token")}`,
+      },
+    }).then(response => {
+      if (!response.ok) {
+        throw new Error(`HTTP error status: ${response.status}`);
+      }
+      return response.json();
+    }).then(data => {
+      this.setState({userName: data.name});
+    }).catch(error => {
+      console.log(error);
+    });
+  }
+
+  componentDidMount() { // Get tasks and name from user
     this.getHabits();
+    this.getName();
   }
 
   closeWindow = () => { // Close the create task window and refresh tasks
@@ -86,7 +106,7 @@ class TaskScreen extends React.Component {
   }
 
   render() {
-    const {createTaskOpen, tasks, selectedMonth, selectedYear, listDate} = this.state;
+    const {createTaskOpen, tasks, selectedMonth, selectedYear, listDate, userName} = this.state;
 
     const taskDivs = tasks.map((task) => // Box for each task in the list
       <div className="task">
@@ -157,7 +177,7 @@ class TaskScreen extends React.Component {
         </div>
         <div className="body">
           <div className="taskScreenHeader">
-            <h1 className="greeting">Welcome back!</h1>
+            <h1 className="greeting">{userName ? `Welcome back, ${userName}!` : ""}</h1>
           </div>
           <div className="bodyLine taskScreenLine"/>
           <div className="taskScreenContent">
