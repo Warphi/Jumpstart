@@ -38,7 +38,7 @@ router.post('/', authenticate, async (req, res) => {
     } catch (err) {
         res.status(500).json({ error: "Error creating new habit."}); // 500 is internal server error
     }
-});
+});;
 
 // DELETE /habits/:id (delete a habit)
 router.delete('/:id', authenticate, async (req, res) => {
@@ -65,6 +65,28 @@ router.get('/', authenticate, async (req, res) => {
         res.status(200).json({ habits }); // 200 is OK
     } catch (err) {
         res.status(500).json({ error: 'Error fetching habits.' }); // 500 is internal server error
+    }
+});
+
+// PATCH /habits/:id (update an existing habit)
+router.patch('/:id', authenticate, async (req, res) => {
+    const updates = req.body;
+
+    try {
+        const updatedHabit = await Habit.findOneAndUpdate(
+            { _id: req.params.id, userId: req.userId },
+            { $set: updates },
+            { new: true, runValidators: true }
+        );
+
+        if (!updatedHabit) {
+            return res.status(404).json({ error: 'Habit not found or user is unauthorized' }); // 404 is not found
+        }
+
+        res.status(200).json({ habit: updatedHabit }); // 200 is OK
+    } catch (err) {
+        console.error('Error updating habit:', err);
+        res.status(500).json({ error: 'Error updating habit.' }); // 500 is internal server error
     }
 });
 
