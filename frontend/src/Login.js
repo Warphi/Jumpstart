@@ -1,5 +1,5 @@
 import logo from './images/Jumpstart_logo.png';
-import { useNavigate } from 'react-router-dom';
+import { data, useNavigate } from 'react-router-dom';
 import React from 'react';
 import './Register.css';
 
@@ -16,7 +16,8 @@ class Login extends React.Component {
           value: "",
           error: null,
         },
-      }
+      },
+      apiError: "",
     }
   }
 
@@ -53,14 +54,16 @@ class Login extends React.Component {
         }),
       }).then(response => {
         if (!response.ok) {
-          throw new Error(`HTTP error status: ${response.status}`);
+          return response.json().then(data => {
+            this.setState({apiError: data.error});
+          });
         }
         return response.json();
       }).then(data => {
         sessionStorage.setItem("auth_token", data.token);
         this.props.navigate("/app"); // Sign in if no errors
       }).catch(error => {
-        alert(error);
+        console.log(error);
       });
     }
   }
@@ -70,7 +73,7 @@ class Login extends React.Component {
   }
 
   render() {
-    const {fields} = this.state;
+    const {fields, apiError} = this.state;
     return (
       <>
         <div className="header">
@@ -98,7 +101,10 @@ class Login extends React.Component {
             }}/>
             <p className="loginError">{fields.password.error}</p>
           </div>
-          <button className="createAccount" onClick={this.submit}>Sign In</button>
+          <div>
+            <button className="createAccount" onClick={this.submit}>Sign In</button>
+            <p className="apiError">{apiError}</p>
+          </div>
           <p className="loginInfo">Don't have an account? <b className="linkText" onClick={this.register}>Sign Up</b></p>
         </div>
       </>

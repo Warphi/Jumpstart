@@ -25,13 +25,13 @@ class TaskScreen extends React.Component {
       },
     }).then(response => {
       if (!response.ok) {
-        throw new Error(`HTTP error status: ${response.status}`);
+        this.props.navigate("/");
       }
       return response.json();
     }).then(data => {
       this.setState({tasks: data.habits});
     }).catch(error => {
-      alert(error);
+      console.log(error);
     });
   }
 
