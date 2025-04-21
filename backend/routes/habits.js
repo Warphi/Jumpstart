@@ -113,7 +113,7 @@ router.get('/day/:date', authenticate, async (req, res) => {
         const habits = await Habit.find({
             userId: req.userId,
             $or: [
-                { date: { $gte: userDate, $lt: endDate } },
+                { date: { $gte: userDate, $lt: endDate }, repeats: { $size: 0 } },
                 { repeats: dayOfWeek, date: { $lte: userDate } }
             ]
         });
