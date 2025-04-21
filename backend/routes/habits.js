@@ -38,7 +38,7 @@ router.post('/', authenticate, async (req, res) => {
     } catch (err) {
         res.status(500).json({ error: "Error creating new habit."}); // 500 is internal server error
     }
-});
+});;
 
 // DELETE /habits/:id (delete a habit)
 router.delete('/:id', authenticate, async (req, res) => {
