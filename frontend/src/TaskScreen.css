@@ -166,6 +166,11 @@
   background-color: #99CCFF;
 }
 
+.createTaskCalendar {
+  margin: 0;
+  margin-top: 15px;
+}
+
 .calendar {
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
   background-color: #99CCFF;
@@ -182,6 +187,10 @@
   color: #112255;
 }
 
+.createTaskCalendarWeekDayLabel {
+  font-size: 16px;
+}
+
 .dayButton {
   aspect-ratio: 1;
   background-color: white;
@@ -189,7 +198,7 @@
   border-radius: 50px;
   font-size: 20px;
   color: #112255;
-  margin: 4px;
+  margin: 2px;
 }
 
 .selectedDay {
@@ -223,6 +232,10 @@
   color: #112255;
   font-weight: 450;
   width: 76%;
+}
+
+.createTaskCalendarTitle {
+  font-size: 26px;
 }
 
 .calendarLine {
