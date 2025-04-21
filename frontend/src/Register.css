@@ -1,6 +1,6 @@
 .login {
   width: 540px;
-  height: 640px;
+  height: 490px;
   background-color: white;
   position: absolute;
   left: 50%;
@@ -10,6 +10,10 @@
   flex-direction: column;
   align-items: center;
   border-radius: 120px;
+}
+
+.register {
+  height: 680px;
 }
 
 .welcome {
@@ -72,7 +76,8 @@ input {
 }
 
 .createAccount {
-  margin-top: 20px;
+  margin-top: 11px;
+  margin-bottom: 11px;
   width: 210px;
   height: 48px;
   background-color: #112255;
@@ -87,4 +92,8 @@ input {
 .createAccount:hover {
   background-color: #3366ff;
   transition: .15s;
+}
+
+.linkText {
+  cursor: pointer;
 }

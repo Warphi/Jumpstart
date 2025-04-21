@@ -1,9 +1,9 @@
 import logo from './images/Jumpstart_logo.png';
 import { useNavigate } from 'react-router-dom';
 import React from 'react';
-import './SignIn.css';
+import './Register.css';
 
-class SignIn extends React.Component {
+class Register extends React.Component {
   constructor() {
     super();
     this.state = {
@@ -92,8 +92,14 @@ class SignIn extends React.Component {
         }).catch(error => {
           alert(error);
         });
+      }).catch(error => {
+        alert(error);
       });
     }
+  }
+
+  login = () => { // When Sign In is clicked
+    this.props.navigate("/");
   }
 
   render() {
@@ -103,7 +109,7 @@ class SignIn extends React.Component {
         <div className="header">
           <img src={logo} height={70} className="logo"/>
         </div>
-        <div className="login">
+        <div className="login register">
           <h1 className="welcome">Welcome!</h1>
           <div className="loginLine"></div>
           <p className="loginInfo">Please fill out the information below to create your account.</p>
@@ -144,6 +150,7 @@ class SignIn extends React.Component {
             <p className="loginError">{fields.confirmPassword.error}</p>
           </div>
           <button className="createAccount" onClick={this.submit}>Create Account</button>
+          <p className="loginInfo">Already have an account? <b className="linkText" onClick={this.login}>Sign In</b></p>
         </div>
       </>
     )
@@ -152,5 +159,5 @@ class SignIn extends React.Component {
 
 export default () => {
   const navigate = useNavigate();
-  return (<SignIn navigate={navigate}/>);
+  return (<Register navigate={navigate}/>);
 }
