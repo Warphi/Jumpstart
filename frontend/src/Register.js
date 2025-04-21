@@ -1,9 +1,9 @@
 import logo from './images/Jumpstart_logo.png';
 import { useNavigate } from 'react-router-dom';
 import React from 'react';
-import './SignIn.css';
+import './Register.css';
 
-class SignIn extends React.Component {
+class Register extends React.Component {
   constructor() {
     super();
     this.state = {
@@ -24,7 +24,8 @@ class SignIn extends React.Component {
           value: "",
           error: null,
         },
-      }
+      },
+      apiError: "",
     }
   }
 
@@ -63,12 +64,15 @@ class SignIn extends React.Component {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
+          name: fields.userName.value,
           email: fields.email.value,
           password: fields.password.value,
         }),
       }).then(response => {
         if (!response.ok) {
-          throw new Error(`HTTP error status: ${response.status}`);
+          return response.json().then(data => {
+            this.setState({apiError: data.error});
+          });
         }
         return response.json();
       }).then(() => {
@@ -90,20 +94,26 @@ class SignIn extends React.Component {
           sessionStorage.setItem("auth_token", data.token);
           this.props.navigate("/app"); // Sign in if no errors
         }).catch(error => {
-          alert(error);
+          console.log(error);
         });
+      }).catch(error => {
+        console.log(error);
       });
     }
   }
 
+  login = () => { // When Sign In is clicked
+    this.props.navigate("/");
+  }
+
   render() {
-    const {fields} = this.state;
+    const {fields, apiError} = this.state;
     return (
       <>
         <div className="header">
-          <img src={logo} height={70} className="logo"/>
+          <img src={logo} height={70} className="logo" onClick={this.login}/>
         </div>
-        <div className="login">
+        <div className="login register">
           <h1 className="welcome">Welcome!</h1>
           <div className="loginLine"></div>
           <p className="loginInfo">Please fill out the information below to create your account.</p>
@@ -143,7 +153,11 @@ class SignIn extends React.Component {
             }}/>
             <p className="loginError">{fields.confirmPassword.error}</p>
           </div>
-          <button className="createAccount" onClick={this.submit}>Create Account</button>
+          <div>
+            <button className="createAccount" onClick={this.submit}>Create Account</button>
+            <p className="apiError">{apiError}</p>
+          </div>
+          <p className="loginInfo">Already have an account? <b className="linkText" onClick={this.login}>Sign In</b></p>
         </div>
       </>
     )
@@ -152,5 +166,5 @@ class SignIn extends React.Component {
 
 export default () => {
   const navigate = useNavigate();
-  return (<SignIn navigate={navigate}/>);
+  return (<Register navigate={navigate}/>);
 }

@@ -3,20 +3,51 @@ import { useNavigate } from 'react-router-dom';
 import React from 'react';
 import './TaskScreen.css'
 import CreateTask from './CreateTask';
+import DateSelection from './DateSelection';
 
 class TaskScreen extends React.Component {
   constructor() {
     super();
+    const date = new Date();
     this.state = {
-      todayOpen: true,
-      laterOpen: false,
       createTaskOpen: false,
       tasks: [],
+      listDate: date,
+      userName: "",
     }
   }
 
-  getHabits = () => {
-    fetch("http://localhost:5000/habits/", { // Make call to backend for getting habits
+  getHabits = (date) => {
+    fetch(`http://localhost:5000/habits/day/${
+      date.getFullYear()
+    }-${
+      (date.getMonth() + 1).toLocaleString('en-US', {
+        minimumIntegerDigits: 2
+      })
+    }-${
+      date.getDate().toLocaleString('en-US', {
+        minimumIntegerDigits: 2
+      })
+    }`, { // Make call to backend for getting habits
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${sessionStorage.getItem("auth_token")}`,
+      },
+    }).then(response => {
+      if (!response.ok && response.status != 404) {
+        if (response.status == 500) this.props.navigate("/");
+        throw new Error(`HTTP error status: ${response.status}`);
+      }
+      return response.json();
+    }).then(data => {
+      this.setState({tasks: data.habits});
+    }).catch(error => {
+      this.setState({tasks: []});
+    });
+  }
+
+  getName = () => { // Make call to backend for getting user's name
+    fetch("http://localhost:5000/auth/user", {
       method: "GET",
       headers: {
         Authorization: `Bearer ${sessionStorage.getItem("auth_token")}`,
@@ -27,25 +58,33 @@ class TaskScreen extends React.Component {
       }
       return response.json();
     }).then(data => {
-      this.setState({tasks: data.habits});
+      this.setState({userName: data.name});
     }).catch(error => {
-      alert(error);
+      console.log(error);
     });
   }
 
-  componentDidMount() {
-    this.getHabits();
+  componentDidMount() { // Get tasks and name from user
+    const {listDate} = this.state;
+    this.getHabits(listDate);
+    this.getName();
   }
 
-  closeWindow = () => {
+  closeWindow = () => { // Close the create task window and refresh tasks
+    const {listDate} = this.state;
     this.setState({createTaskOpen: false});
-    this.getHabits();
+    this.getHabits(listDate);
+  }
+
+  setSelectedDate = (date) => {
+    this.setState({listDate: date});
+    this.getHabits(date);
   }
 
   render() {
-    const {todayOpen, laterOpen, createTaskOpen, tasks} = this.state;
+    const {createTaskOpen, tasks, listDate, userName} = this.state;
 
-    const taskDivs = tasks.map((task) => 
+    const taskDivs = tasks.map((task) => // Box for each task in the list
       <div className="task">
         <p className="taskInfo">
           Task: {task.name}<br/>
@@ -56,6 +95,11 @@ class TaskScreen extends React.Component {
         <button className="taskButton editTask">Edit Task</button>
       </div>
     )
+
+    const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+    const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    const dateString = `${days[listDate.getDay()]}, ${months[listDate.getMonth()]} ${listDate.getDate()}, ${listDate.getFullYear()}`;
+    // dateString shows the current date at the top of the task list
 
     return (
       <div className="taskScreen">
@@ -75,24 +119,24 @@ class TaskScreen extends React.Component {
         </div>
         <div className="body">
           <div className="taskScreenHeader">
-            <h1 className="greeting">Welcome back!</h1>
+            <h1 className="greeting">{userName ? `Welcome back, ${userName}!` : ""}</h1>
           </div>
           <div className="bodyLine taskScreenLine"/>
           <div className="taskScreenContent">
-            <button className="createTask" onClick={() => {
-              this.setState({createTaskOpen: true})
-            }}>Create Task</button>
-            <br/>
-            <button className="openClose" onClick={() => {
-              this.setState({todayOpen: !todayOpen});
-            }}>{(todayOpen) ? "▾" : "▸"} Tasks for Today</button>
-            <br/>
-            {(todayOpen) && <div className="tasksToday">
-              <ul>{taskDivs}</ul>
-            </div>}
-            <button className="openClose" onClick={() => {
-              this.setState({laterOpen: !laterOpen});
-            }}>{(laterOpen) ? "▾" : "▸"} Tasks for Later</button>
+            <div className="taskScreenContentLeft">
+              <button className="createTask" onClick={() => {
+                this.setState({createTaskOpen: true})
+              }}>Create Task</button>
+              <h3 className="dateHeader">{dateString}</h3>
+              <div className="tasksToday">
+                {taskDivs}
+              </div>
+            </div>
+            <DateSelection
+              selectedDate={listDate}
+              setSelectedDate={this.setSelectedDate}
+              class="taskScreenCalendar"
+            />
           </div>
         </div>
         {createTaskOpen && <CreateTask closeWindow={this.closeWindow}/>}

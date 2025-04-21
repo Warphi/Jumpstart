@@ -1,6 +1,6 @@
 .login {
   width: 540px;
-  height: 640px;
+  height: 510px;
   background-color: white;
   position: absolute;
   left: 50%;
@@ -10,6 +10,20 @@
   flex-direction: column;
   align-items: center;
   border-radius: 120px;
+}
+
+.register {
+  height: 695px;
+}
+
+.forgotPassword {
+  height: 400px;
+  padding-top: 35px;
+}
+
+.changePassword {
+  height: 440px;
+  padding-top: 30px;
 }
 
 .welcome {
@@ -28,6 +42,10 @@
 
 .loginInfo {
   color: #112255;
+}
+
+.bottomText {
+  margin-bottom: -10px;
 }
 
 p {
@@ -72,7 +90,8 @@ input {
 }
 
 .createAccount {
-  margin-top: 20px;
+  margin-top: 11px;
+  margin-bottom: 20px;
   width: 210px;
   height: 48px;
   background-color: #112255;
@@ -87,4 +106,17 @@ input {
 .createAccount:hover {
   background-color: #3366ff;
   transition: .15s;
+}
+
+.apiError {
+  color: red;
+  margin-top: -10px;
+  position: absolute;
+  width: 100%;
+  left: 0;
+  text-align: center;
+}
+
+.linkText {
+  cursor: pointer;
 }
