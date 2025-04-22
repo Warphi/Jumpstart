@@ -130,6 +130,7 @@ class CreateTask extends React.Component {
         date.getMonth(),
         date.getDate()
       )
+      todayDate.setUTCHours(0, 0, 0, 0);
       const startTime = new Date(
         date.getFullYear(),
         date.getMonth(),

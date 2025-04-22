@@ -11,6 +11,7 @@ import AwaitPasswordChange from './AwaitPasswordChange';
 import PasswordChangeSuccess from './PasswordChangeSuccess';
 import AwaitVerification from './AwaitVerification';
 import Verification from './Verification';
+import Statistics from './Statistics';
 import reportWebVitals from './reportWebVitals';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -29,6 +30,7 @@ root.render(
         <Route path="/awaitverification" element={<AwaitVerification />}/>
         <Route path="/awaitpasswordchange" element={<AwaitPasswordChange />}/>
         <Route path="/verify/:token" element={<Verification />}/>
+        <Route path="/statistics" element={<Statistics />}/>
         <Route path="/passwordchangesuccess" element={<PasswordChangeSuccess />}/>
       </Routes>
     </BrowserRouter>
