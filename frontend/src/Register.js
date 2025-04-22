@@ -74,30 +74,8 @@ class Register extends React.Component {
             this.setState({apiError: data.error});
           });
         }
+        this.props.navigate("/awaitverification");
         return response.json();
-      }).then(() => {
-        fetch("http://localhost:5000/auth/login", { // Make call to backend for login
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            email: fields.email.value,
-            password: fields.password.value,
-          }),
-        }).then(response => {
-          if (!response.ok) {
-            throw new Error(`HTTP error status: ${response.status}`);
-          }
-          return response.json();
-        }).then(data => {
-          sessionStorage.setItem("auth_token", data.token);
-          this.props.navigate("/app"); // Sign in if no errors
-        }).catch(error => {
-          console.log(error);
-        });
-      }).catch(error => {
-        console.log(error);
       });
     }
   }

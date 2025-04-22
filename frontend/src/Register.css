@@ -16,6 +16,10 @@
   height: 695px;
 }
 
+.awaitVerification {
+  height: 150px;
+}
+
 .welcome {
   font-size: 55px;
   margin: 10px;
@@ -105,4 +109,11 @@ input {
 
 .linkText {
   cursor: pointer;
+}
+
+.verificationInfo {
+  text-align: center;
+  display: flex;
+  align-items: center;
+  height: 100%;
 }
