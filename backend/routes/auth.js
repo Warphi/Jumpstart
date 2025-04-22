@@ -119,4 +119,61 @@ router.get('/verify/:token', async (req, res) => {
     }
 });
 
+// POST /auth/forgot-password
+router.post('/forgot-password', async (req, res) => {
+    const { email } = req.body;
+
+    try {
+        const user = await User.findOne({ email });
+        if (!user) return res.status(404).json({ message: 'No user found.'}); // 404 is not found
+
+        const resetToken = crypto.randomBytes(32).toString('hex');
+        user.resetToken = resetToken;
+        user.resetTokenExpiry = Date.now() + 1000 * 3600;  // 1 hour from now
+        await user.save();
+
+        const resetLink = `http://localhost:3000/reset/${resetToken}`;
+
+        await transporter.sendMail({
+            from: `Jumpstart App <postmaster@${process.env.EMAIL_USER}>`,
+            to: email,
+            subject: 'Password Reset Request',
+            html: `<p>Click <a href="${resetLink}">here</a> to reset your password. This link is valid for 1 hour.</p>`
+        });
+
+        res.status(200).json({ message: 'Reset link sent' });
+    } catch (err) {
+        console.error('Error in forgot-password:', err);
+        res.status(500).json({ error: 'Error processing reset request' });
+    }
+});
+
+// POST /auth/reset-password/:token
+router.post('/reset-password/:token', async (req, res) => {
+    const { password } = req.body;
+
+    try {
+        const user = await User.findOne({
+            resetToken: req.params.token,
+            resetTokenExpiry: { $gt: Date.now() }
+        });
+
+        if (!user) {
+            return res.status(400).json({ error: 'Token is invalid or has expired.' });
+        }
+
+        user.password = password;
+        user.resetToken = undefined;
+        user.resetTokenExpiry = undefined;
+
+        await user.save();
+
+        const token = jwt.sign({ userId: user._id }, process.env.TOKEN_SECRET, {expiresIn: '1d'}); // grant the user a token valid for one day
+        res.json({ token });
+    } catch (err) {
+        console.error('Error in reset-password:', err);
+        res.status(500).json({ error: 'Error resetting password' });
+    }
+});
+
 module.exports = router;
