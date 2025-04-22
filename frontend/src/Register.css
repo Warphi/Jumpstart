@@ -1,0 +1,142 @@
+.login {
+  width: 540px;
+  height: 510px;
+  background-color: white;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-radius: 120px;
+}
+
+.register {
+  height: 695px;
+}
+
+.forgotPassword {
+  height: 405px;
+  padding-top: 35px;
+}
+
+.changePassword {
+  height: 440px;
+  padding-top: 30px;
+}
+
+.awaitVerification {
+  height: 150px;
+}
+
+.passwordChangeSuccess {
+  height: 150px;
+}
+
+.welcome {
+  font-size: 55px;
+  margin: 10px;
+  margin-top: 20px;
+  color: #112255;
+}
+
+.loginLine {
+  width: 450px;
+  height: 6px;
+  border-radius: 3px;
+  background-color: #112255;
+}
+
+.loginInfo {
+  color: #112255;
+}
+
+.bottomText {
+  margin-bottom: -10px;
+}
+
+p {
+  font-weight: 500;
+}
+
+.inputBox {
+  width: 400px;
+  margin-bottom: 25px;
+}
+
+.inputText {
+  margin-top: 6px;
+  margin-bottom: 6px;
+  color: #112255;
+}
+
+input {
+  font-family: 'Fredoka';
+}
+
+.loginInput {
+  width: 392px;
+  font-size: 18px;
+  background-color: #3366ff;
+  border: solid;
+  border-width: 3px;
+  border-color: #112255;
+  border-radius: 6px;
+  padding: 5px 7px;
+  color: white;
+}
+
+::placeholder {
+  color: #babaff;
+}
+
+.loginError {
+  margin-top: 2px;
+  position: absolute;
+  color: red;
+}
+
+.createAccount {
+  margin-top: 11px;
+  margin-bottom: 20px;
+  width: 210px;
+  height: 48px;
+  background-color: #112255;
+  color: white;
+  font-size: 22px;
+  font-weight: 600;
+  border: 0;
+  border-radius: 15px;
+  transition: .15s;
+}
+
+.createAccount:hover {
+  background-color: #3366ff;
+  transition: .15s;
+}
+
+.apiError {
+  color: red;
+  margin-top: -10px;
+  position: absolute;
+  width: 100%;
+  left: 0;
+  text-align: center;
+}
+
+.linkText {
+  cursor: pointer;
+}
+
+.verificationInfo {
+  text-align: center;
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+
+.passwordChangeSuccessText {
+  margin-top: 30px;
+  margin-bottom: 15px;
+}
