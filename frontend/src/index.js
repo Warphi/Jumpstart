@@ -9,6 +9,7 @@ import ForgotPassword from './ForgotPassword';
 import ChangePassword from './ChangePassword';
 import AwaitVerification from './AwaitVerification';
 import Verification from './Verification';
+import Statistics from './Statistics';
 import reportWebVitals from './reportWebVitals';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -26,6 +27,7 @@ root.render(
         <Route path="/changepassword/:auth" element={<ChangePassword />}/>
         <Route path="/awaitverification" element={<AwaitVerification />}/>
         <Route path="/verify/:token" element={<Verification />}/>
+        <Route path="/statistics" element={<Statistics />}/>
       </Routes>
     </BrowserRouter>
   </React.StrictMode>
