@@ -4,11 +4,15 @@ import React from 'react';
 import './Register.css';
 
 class AwaitVerification extends React.Component {
+  logoPress = () => {
+    this.props.navigate("/");
+  }
+
   render() {
     return (
       <>
         <div className="header">
-          <img src={logo} height={70} className="logo"/>
+          <img src={logo} height={70} className="logo" onClick={this.logoPress}/>
         </div>
         <div className="login awaitVerification">
           <p className="loginInfo verificationInfo">A verification email has been sent to your address. Please check your inbox.</p>

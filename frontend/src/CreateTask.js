@@ -134,15 +134,15 @@ class CreateTask extends React.Component {
         date.getFullYear(),
         date.getMonth(),
         date.getDate(),
-        parseInt(fields.startTime.value.split(':')[0]) + (fields.startTime.value[fields.startTime.value.length - 2].toUpperCase() === "P" ? 12 : 0),
-        parseInt(fields.startTime.value.split(':')[1].slice(0, 2)) + (fields.startTime.value[fields.startTime.value.length - 2].toUpperCase() === "P" ? 12 : 0)
+        parseInt(fields.startTime.value.split(':')[0]) - (fields.startTime.value.split(':')[0] == "12" ? 12 : 0) + (fields.startTime.value[fields.startTime.value.length - 2].toUpperCase() === "P" ? 12 : 0),
+        parseInt(fields.startTime.value.split(':')[1].slice(0, 2))
       );
       const endTime = new Date(
         date.getFullYear(),
         date.getMonth(),
         date.getDate(),
-        parseInt(fields.endTime.value.split(':')[0]) + (fields.endTime.value[fields.startTime.value.length - 2].toUpperCase() === "P" ? 12 : 0),
-        parseInt(fields.endTime.value.split(':')[1].slice(0, 2)) + (fields.endTime.value[fields.startTime.value.length - 2].toUpperCase() === "P" ? 12 : 0)
+        parseInt(fields.endTime.value.split(':')[0]) - (fields.endTime.value.split(':')[0] == "12" ? 12 : 0) + (fields.endTime.value[fields.endTime.value.length - 2].toUpperCase() === "P" ? 12 : 0),
+        parseInt(fields.endTime.value.split(':')[1].slice(0, 2))
       );
       fetch("http://localhost:5000/habits", { // Make call to backend for task creation
         method: "POST",
