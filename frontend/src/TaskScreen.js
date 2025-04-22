@@ -121,8 +121,12 @@ class TaskScreen extends React.Component {
             <img src={logo} height={70} className="logo"/>
           </div>
           <div className="sidebarLine taskScreenLine"/>
-          <button className="sidebarButton">Tasks</button>
-          <button className="sidebarButton">Statistics</button>
+          <button className="sidebarButton" onClick={() => {
+            this.props.navigate("/app");
+          }}>Tasks</button>
+          <button className="sidebarButton" onClick={() => {
+            this.props.navigate("/statistics");
+          }}>Statistics</button>
           <div className="sidebarEmptySpace"/>
           <button className="sidebarButton logOffButton" onClick={() => {
             this.props.navigate("/");
