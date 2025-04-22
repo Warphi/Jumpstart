@@ -1,6 +1,6 @@
 .createTaskWindow {
-  width: 700px;
-  height: 490px;
+  width: 850px;
+  height: 555px;
   position: absolute;
   left: 50%;
   top: 50%;
@@ -17,7 +17,7 @@
 
 .focus {
   position: fixed;
-  width: 100vw;
+  width: 100%;
   height: 100vh;
   background-color: #3366ff75;
   z-index: 5;
@@ -28,13 +28,28 @@
   text-align: center;
   font-size: 40px;
   margin-top: 7px;
-  margin-bottom: -5px;
+  margin-bottom: 0px;
   color: #112255;
+}
+
+.createTaskSides {
+  display: flex;
+}
+
+.createTaskLeft {
+  width: 60%;
+  margin-left: 15px;
+  margin-right: 15px;
+}
+
+.createTaskRight {
+  width: 40%;
+  margin-right: 15px;
 }
 
 .taskInputBox {
   align-self: center;
-  width: 670px;
+  width: 100%;
   position: relative;
   margin-bottom: 2px;
 }
@@ -66,7 +81,14 @@
   text-align: right;
   right: 8px;
   top: 8px;
-  margin-top: 0;
+  margin-top: -3px;
+}
+
+.timeError {
+  margin-top: 2px;
+  position: absolute;
+  color: red;
+  font-size: 20px;
 }
 
 textarea {
@@ -75,6 +97,27 @@ textarea {
 
 .descriptionInput {
   height: 100px;
+  resize: none;
+}
+
+.timeInputBox {
+  display: flex;
+}
+
+.timeInputComponent {
+  width: 200px;
+  margin-right: 15px;
+}
+
+.taskRadioOptions {
+  grid-template-columns: 1fr 1fr 1fr;
+  display: grid;
+  width: 85%;
+}
+
+.taskRadioOption {
+  margin-bottom: 5px;
+  display: flex;
 }
 
 .taskRadioInput {
@@ -85,6 +128,8 @@ textarea {
   outline: 0.15em solid #112255;
   outline-offset: 0.1em;
   margin-right: 0.7em;
+  height: 70%;
+  aspect-ratio: 1;
 }
 
 .taskRadioInput:checked {
@@ -94,21 +139,38 @@ textarea {
 
 .taskRadioText {
   font-size: 18px;
-  margin-right: 1.2em;
   color: #112255;
   font-weight: 450;
+  margin-top: 5px;
+}
+
+.specificDay {
+  margin-right: 0.8em;
+}
+
+.repeatsEvery {
+  margin-top: 15px;
+}
+
+.bottomButtons {
+  align-self: center;
+  margin-top: 28px;
 }
 
 .submitTask {
-  align-self: center;
+  padding: 5px 10px;
   border: 0;
   background-color: #3366ff;
   font-size: 26px;
   color: white;
-  padding: 5px 10px;
   border-radius: 12px;
-  margin-top: 12px;
   transition: .15s;
+  margin: 5px;
+  margin-top: 0;
+}
+
+.cancel {
+  background-color: #777777;
 }
 
 .submitTask:hover {

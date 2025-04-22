@@ -89,7 +89,7 @@ class Register extends React.Component {
     return (
       <>
         <div className="header">
-          <img src={logo} height={70} className="logo"/>
+          <img src={logo} height={70} className="logo" onClick={this.login}/>
         </div>
         <div className="login register">
           <h1 className="welcome">Welcome!</h1>
@@ -132,7 +132,7 @@ class Register extends React.Component {
             <p className="loginError">{fields.confirmPassword.error}</p>
           </div>
           <div>
-          <button className="createAccount" onClick={this.submit}>Create Account</button>
+            <button className="createAccount" onClick={this.submit}>Create Account</button>
             <p className="apiError">{apiError}</p>
           </div>
           <p className="loginInfo">Already have an account? <b className="linkText" onClick={this.login}>Sign In</b></p>

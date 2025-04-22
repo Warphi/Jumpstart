@@ -131,6 +131,11 @@
   margin: 12px;
 }
 
+.taskTitle {
+  font-weight: 600;
+  font-size: 24px;
+}
+
 .taskButton {
   border: solid;
   border-width: 2px;
@@ -159,11 +164,19 @@
 }
 
 .dateSelection {
-  flex: 1;
   margin: 30px;
   height: 100px;
   border-radius: 15px;
   background-color: #99CCFF;
+}
+
+.createTaskCalendar {
+  margin: 0;
+  margin-top: 15px;
+}
+
+.taskScreenCalendar {
+  width: 470px;
 }
 
 .calendar {
@@ -182,6 +195,10 @@
   color: #112255;
 }
 
+.createTaskCalendarWeekDayLabel {
+  font-size: 16px;
+}
+
 .dayButton {
   aspect-ratio: 1;
   background-color: white;
@@ -189,7 +206,7 @@
   border-radius: 50px;
   font-size: 20px;
   color: #112255;
-  margin: 4px;
+  margin: 2px;
 }
 
 .selectedDay {
@@ -223,6 +240,10 @@
   color: #112255;
   font-weight: 450;
   width: 76%;
+}
+
+.createTaskCalendarTitle {
+  font-size: 26px;
 }
 
 .calendarLine {

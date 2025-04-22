@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import React from 'react';
 import './TaskScreen.css'
 import CreateTask from './CreateTask';
+import DateSelection from './DateSelection';
 
 class TaskScreen extends React.Component {
   constructor() {
@@ -11,28 +12,37 @@ class TaskScreen extends React.Component {
     this.state = {
       createTaskOpen: false,
       tasks: [],
-      selectedMonth: date.getMonth(),
-      selectedYear: date.getFullYear(),
       listDate: date,
       userName: "",
     }
   }
 
-  getHabits = () => {
-    fetch("http://localhost:5000/habits/", { // Make call to backend for getting habits
+  getHabits = (date) => {
+    fetch(`http://localhost:5000/habits/day/${
+      date.getFullYear()
+    }-${
+      (date.getMonth() + 1).toLocaleString('en-US', {
+        minimumIntegerDigits: 2
+      })
+    }-${
+      date.getDate().toLocaleString('en-US', {
+        minimumIntegerDigits: 2
+      })
+    }`, { // Make call to backend for getting habits
       method: "GET",
       headers: {
         Authorization: `Bearer ${sessionStorage.getItem("auth_token")}`,
       },
     }).then(response => {
-      if (!response.ok) {
-        this.props.navigate("/");
+      if (!response.ok && response.status != 404) {
+        if (response.status == 500) this.props.navigate("/");
+        throw new Error(`HTTP error status: ${response.status}`);
       }
       return response.json();
     }).then(data => {
-      this.setState({tasks: data.habits});
+      this.setState({tasks: data.habits.sort((a, b) => new Date(a.startBy).getHours() - new Date(b.startBy).getHours())});
     }).catch(error => {
-      console.log(error);
+      this.setState({tasks: []});
     });
   }
 
@@ -55,63 +65,42 @@ class TaskScreen extends React.Component {
   }
 
   componentDidMount() { // Get tasks and name from user
-    this.getHabits();
+    const {listDate} = this.state;
+    this.getHabits(listDate);
     this.getName();
   }
 
   closeWindow = () => { // Close the create task window and refresh tasks
+    const {listDate} = this.state;
     this.setState({createTaskOpen: false});
-    this.getHabits();
-  }
-
-  previousMonth = () => { // Move back a month on the calendar
-    const {selectedMonth, selectedYear} = this.state;
-    if (selectedMonth === 0) {
-      this.setState({
-        selectedMonth: 11,
-        selectedYear: selectedYear - 1,
-      });
-    }
-    else {
-      this.setState({selectedMonth: selectedMonth - 1});
+    for (let i = 0; i < 5; i++) {
+      this.getHabits(listDate);
     }
   }
 
-  nextMonth = () => { // Move forward a month on the calendar
-    const {selectedMonth, selectedYear} = this.state;
-    if (selectedMonth === 11) {
-      this.setState({
-        selectedMonth: 0,
-        selectedYear: selectedYear + 1,
-      });
-    }
-    else {
-      this.setState({selectedMonth: selectedMonth + 1});
-    }
-  }
-
-  selectDate = (day) => { // When a date for the current month is selected on the calendar
-    const {selectedMonth, selectedYear} = this.state;
-    this.setState({listDate: new Date(selectedYear, selectedMonth, day)});
-  }
-
-  selectPrevMonthDate = (date) => { // When a date for the previous month is selected on the calendar
+  setSelectedDate = (date) => {
     this.setState({listDate: date});
-    this.previousMonth();
-  }
-
-  selectNextMonthDate = (date) => { // When a date for the next month is selected on the calendar
-    this.setState({listDate: date});
-    this.nextMonth();
+    this.getHabits(date);
   }
 
   render() {
-    const {createTaskOpen, tasks, selectedMonth, selectedYear, listDate, userName} = this.state;
+    const {createTaskOpen, tasks, listDate, userName} = this.state;
 
     const taskDivs = tasks.map((task) => // Box for each task in the list
       <div className="task">
         <p className="taskInfo">
-          Task: {task.name}<br/>
+          <b className="taskTitle">{task.name}</b><br/>
+          {`
+            ${new Date(task.startBy).toLocaleTimeString('en-US', {
+              hour: 'numeric',
+              minute: '2-digit',
+              hour12: true,
+            })} - ${new Date(task.completeBy).toLocaleTimeString('en-US', {
+              hour: 'numeric',
+              minute: '2-digit',
+              hour12: true,
+            })}
+          `}<br/>
           Priority: {task.priority}<br/>
           Description: {task.description}
         </p>
@@ -124,40 +113,6 @@ class TaskScreen extends React.Component {
     const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
     const dateString = `${days[listDate.getDay()]}, ${months[listDate.getMonth()]} ${listDate.getDate()}, ${listDate.getFullYear()}`;
     // dateString shows the current date at the top of the task list
-
-    const weekDayLabels = days.map((day) => 
-      <p className="weekDayLabel">{day.substring(0, 3)}</p>
-    ); // Each of the labels for days of the week on the calendar
-    
-    const prevMonthDate = (distance) => { // Get date by backtracking a certain number of days from the first day of the current month
-      var date = new Date(selectedYear, selectedMonth, 1);
-      date.setDate(date.getDate() - (distance));
-      return date;
-    }
-
-    const prevMonthDayButtons = [...Array(new Date(selectedYear, selectedMonth, 1).getDay()).keys()].reverse().map((distance) =>
-      <button className={(listDate.getTime() === prevMonthDate(distance + 1).getTime()) ? "dayButton selectedDay" : "dayButton otherMonth"} onClick={() => this.selectPrevMonthDate(prevMonthDate(distance + 1))}>
-        {prevMonthDate(distance + 1).getDate()}
-      </button>
-    ); // Each of the gray days on the calendar from the previous month
-
-    const dayButtons = Array(new Date(selectedYear, selectedMonth + 1, 0).getDate()).keys().map((day) =>
-      <button className={(listDate.getMonth() === selectedMonth && listDate.getFullYear() === selectedYear && listDate.getDate() == (day + 1)) ? "dayButton selectedDay" : "dayButton"} onClick={() => this.selectDate(day + 1)}>
-        {day + 1}
-      </button>
-    ); // Each of the normal days on the calendar for the current month
-    
-   const nextMonthDate = (distance) => { // Get date by moving forward a certain number of days from the last day of the current month
-      var date = new Date(selectedYear, selectedMonth + 1, 0);
-      date.setDate(date.getDate() + (distance));
-      return date;
-    }
-    
-    const nextMonthDayButtons = [...Array(6 - new Date(selectedYear, selectedMonth + 1, 0).getDay()).keys()].map((distance) =>
-      <button className={(listDate.getTime() === nextMonthDate(distance + 1).getTime()) ? "dayButton selectedDay" : "dayButton otherMonth"} onClick={() => this.selectNextMonthDate(nextMonthDate(distance + 1))}>
-        {nextMonthDate(distance + 1).getDate()}
-      </button>
-    ); // Each of the gray days on the calendar from the next month
 
     return (
       <div className="taskScreen">
@@ -190,20 +145,11 @@ class TaskScreen extends React.Component {
                 {taskDivs}
               </div>
             </div>
-            <div className="dateSelection">
-              <div className="calendarHeader">
-                <button className="changeMonth" onClick={this.previousMonth}>◀︎</button>
-                <h3 className="calendarTitle">{`${months[selectedMonth]} ${selectedYear}`}</h3>
-                <button className="changeMonth" onClick={this.nextMonth}>▶︎</button>
-              </div>
-              <div className="calendarLine"/>
-              <div className="calendar">
-                {weekDayLabels}
-                {prevMonthDayButtons}
-                {dayButtons}
-                {nextMonthDayButtons}
-              </div>
-            </div>
+            <DateSelection
+              selectedDate={listDate}
+              setSelectedDate={this.setSelectedDate}
+              class="taskScreenCalendar"
+            />
           </div>
         </div>
         {createTaskOpen && <CreateTask closeWindow={this.closeWindow}/>}

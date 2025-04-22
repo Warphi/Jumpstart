@@ -20,6 +20,7 @@ code {
 .logo {
   filter: brightness(100);
   margin: 15px;
+  cursor: pointer;
 }
 
 h1 {
