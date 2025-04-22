@@ -24,6 +24,9 @@
 .changePassword {
   height: 440px;
   padding-top: 30px;
+
+.awaitVerification {
+  height: 150px;
 }
 
 .welcome {
@@ -119,4 +122,11 @@ input {
 
 .linkText {
   cursor: pointer;
+}
+
+.verificationInfo {
+  text-align: center;
+  display: flex;
+  align-items: center;
+  height: 100%;
 }

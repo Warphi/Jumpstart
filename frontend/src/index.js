@@ -7,6 +7,8 @@ import TaskScreen from './TaskScreen';
 import Login from './Login';
 import ForgotPassword from './ForgotPassword';
 import ChangePassword from './ChangePassword';
+import AwaitVerification from './AwaitVerification';
+import Verification from './Verification';
 import reportWebVitals from './reportWebVitals';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -22,6 +24,8 @@ root.render(
         <Route index element={<Login />}/>
         <Route path="/forgotpassword" element={<ForgotPassword />}/>
         <Route path="/changepassword/:auth" element={<ChangePassword />}/>
+        <Route path="/awaitverification" element={<AwaitVerification />}/>
+        <Route path="/verify/:token" element={<Verification />}/>
       </Routes>
     </BrowserRouter>
   </React.StrictMode>
