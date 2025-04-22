@@ -124,19 +124,25 @@ class CreateTask extends React.Component {
 
     if (errorFound) this.forceUpdate(); // Render page so that errors appear (if any)
     else {
+      const date = new Date();
+      const todayDate = new Date(
+        date.getFullYear(),
+        date.getMonth(),
+        date.getDate()
+      )
       const startTime = new Date(
-        fields.date.value.getFullYear(),
-        fields.date.value.getMonth(),
-        fields.date.value.getDate(),
-        parseInt(fields.startTime.value.split(':')[0]),
-        parseInt(fields.startTime.value.split(':')[1].slice(0, 2))
+        date.getFullYear(),
+        date.getMonth(),
+        date.getDate(),
+        parseInt(fields.startTime.value.split(':')[0]) + (fields.startTime.value[fields.startTime.value.length - 2].toUpperCase() === "P" ? 12 : 0),
+        parseInt(fields.startTime.value.split(':')[1].slice(0, 2)) + (fields.startTime.value[fields.startTime.value.length - 2].toUpperCase() === "P" ? 12 : 0)
       );
       const endTime = new Date(
-        fields.date.value.getFullYear(),
-        fields.date.value.getMonth(),
-        fields.date.value.getDate(),
-        parseInt(fields.endTime.value.split(':')[0]),
-        parseInt(fields.endTime.value.split(':')[1].slice(0, 2))
+        date.getFullYear(),
+        date.getMonth(),
+        date.getDate(),
+        parseInt(fields.endTime.value.split(':')[0]) + (fields.endTime.value[fields.startTime.value.length - 2].toUpperCase() === "P" ? 12 : 0),
+        parseInt(fields.endTime.value.split(':')[1].slice(0, 2)) + (fields.endTime.value[fields.startTime.value.length - 2].toUpperCase() === "P" ? 12 : 0)
       );
       fetch("http://localhost:5000/habits", { // Make call to backend for task creation
         method: "POST",
@@ -149,7 +155,8 @@ class CreateTask extends React.Component {
           priority: fields.priority.value,
           description: fields.description.value,
           repeats: fields.date.repeats,
-          dateTime: startTime,
+          date: fields.date.type === "specific" ? fields.date.value : todayDate,
+          startBy: startTime,
           completeBy: endTime,
         }),
       }).then(response => {
@@ -288,7 +295,10 @@ class CreateTask extends React.Component {
             </div>}
          </div>
         </div>
-        <button className="submitTask" onClick={this.submitTask}>Create Task</button>
+        <div className="bottomButtons">
+          <button className="submitTask" onClick={this.submitTask}>Create Task</button>
+          <button className="submitTask cancel" onClick={this.props.closeWindow}>Cancel</button>
+        </div>
       </div>
     )
   }

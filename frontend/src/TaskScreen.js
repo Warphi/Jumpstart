@@ -40,7 +40,7 @@ class TaskScreen extends React.Component {
       }
       return response.json();
     }).then(data => {
-      this.setState({tasks: data.habits});
+      this.setState({tasks: data.habits.sort((a, b) => new Date(a.startBy).getHours() - new Date(b.startBy).getHours())});
     }).catch(error => {
       this.setState({tasks: []});
     });
@@ -73,7 +73,9 @@ class TaskScreen extends React.Component {
   closeWindow = () => { // Close the create task window and refresh tasks
     const {listDate} = this.state;
     this.setState({createTaskOpen: false});
-    this.getHabits(listDate);
+    for (let i = 0; i < 5; i++) {
+      this.getHabits(listDate);
+    }
   }
 
   setSelectedDate = (date) => {
@@ -87,7 +89,18 @@ class TaskScreen extends React.Component {
     const taskDivs = tasks.map((task) => // Box for each task in the list
       <div className="task">
         <p className="taskInfo">
-          Task: {task.name}<br/>
+          <b className="taskTitle">{task.name}</b><br/>
+          {`
+            ${new Date(task.startBy).toLocaleTimeString('en-US', {
+              hour: 'numeric',
+              minute: '2-digit',
+              hour12: true,
+            })} - ${new Date(task.completeBy).toLocaleTimeString('en-US', {
+              hour: 'numeric',
+              minute: '2-digit',
+              hour12: true,
+            })}
+          `}<br/>
           Priority: {task.priority}<br/>
           Description: {task.description}
         </p>

@@ -152,16 +152,25 @@ textarea {
   margin-top: 15px;
 }
 
-.submitTask {
+.bottomButtons {
   align-self: center;
+  margin-top: 28px;
+}
+
+.submitTask {
+  padding: 5px 10px;
   border: 0;
   background-color: #3366ff;
   font-size: 26px;
   color: white;
-  padding: 5px 10px;
   border-radius: 12px;
-  margin-top: 28px;
   transition: .15s;
+  margin: 5px;
+  margin-top: 0;
+}
+
+.cancel {
+  background-color: #777777;
 }
 
 .submitTask:hover {
