@@ -129,7 +129,9 @@ class CreateTask extends React.Component {
         date.getFullYear(),
         date.getMonth(),
         date.getDate()
-      )
+      );
+      const fieldsDate = new Date(fields.date.value);
+      fieldsDate.setUTCHours(0, 0, 0, 0);
       todayDate.setUTCHours(0, 0, 0, 0);
       const startTime = new Date(
         date.getFullYear(),
@@ -156,7 +158,7 @@ class CreateTask extends React.Component {
           priority: fields.priority.value,
           description: fields.description.value,
           repeats: fields.date.repeats,
-          date: fields.date.type === "specific" ? fields.date.value : todayDate,
+          date: fields.date.type === "specific" ? fieldsDate : todayDate,
           startBy: startTime,
           completeBy: endTime,
         }),
