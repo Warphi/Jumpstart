@@ -25,11 +25,15 @@ class Verification extends React.Component {
     });;
   }
 
+  logoPress = () => {
+    this.props.navigate("/");
+  }
+
   render() {
     return (
       <>
         <div className="header">
-          <img src={logo} height={70} className="logo"/>
+          <img src={logo} height={70} className="logo" onClick={this.logoPress}/>
         </div>
       </>
     )
