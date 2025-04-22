@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import React from 'react';
 import './TaskScreen.css'
 import CreateTask from './CreateTask';
+import EditTask from './EditTask';
 import DateSelection from './DateSelection';
 
 class TaskScreen extends React.Component {
@@ -11,9 +12,11 @@ class TaskScreen extends React.Component {
     const date = new Date();
     this.state = {
       createTaskOpen: false,
+      editTaskOpen: false,
       tasks: [],
       listDate: date,
       userName: "",
+      selectedTask: null,
     }
   }
 
@@ -72,7 +75,7 @@ class TaskScreen extends React.Component {
 
   closeWindow = () => { // Close the create task window and refresh tasks
     const {listDate} = this.state;
-    this.setState({createTaskOpen: false});
+    this.setState({createTaskOpen: false, editTaskOpen: false});
     for (let i = 0; i < 5; i++) {
       this.getHabits(listDate);
     }
@@ -83,31 +86,65 @@ class TaskScreen extends React.Component {
     this.getHabits(date);
   }
 
-  render() {
-    const {createTaskOpen, tasks, listDate, userName} = this.state;
+  markComplete = (task) => {
+    const {listDate} = this.state;
+    const justListDate = new Date(listDate);
+    justListDate.setUTCHours(0, 0, 0, 0);
+    fetch(`http://localhost:5000/habits/${task._id}`, {
+      method: "PATCH",
+      headers: {
+        Authorization: `Bearer ${sessionStorage.getItem("auth_token")}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        completedDates: task.completedDates.find(day => day === justListDate.toJSON()) ? task.completedDates.filter(taskDay => taskDay !== justListDate.toJSON()) : [...task.completedDates, justListDate],
+      })
+    }).then(response => {
+      if (!response.ok) {
+        throw new Error(`HTTP error status: ${response.status}`);
+      }
+      return response.json();
+    }).then(data => {
+      this.getHabits(listDate);
+    }).catch(error => {
+      console.log(error);
+    });
+  }
 
-    const taskDivs = tasks.map((task) => // Box for each task in the list
-      <div className="task">
-        <p className="taskInfo">
-          <b className="taskTitle">{task.name}</b><br/>
-          {`
-            ${new Date(task.startBy).toLocaleTimeString('en-US', {
-              hour: 'numeric',
-              minute: '2-digit',
-              hour12: true,
-            })} - ${new Date(task.completeBy).toLocaleTimeString('en-US', {
-              hour: 'numeric',
-              minute: '2-digit',
-              hour12: true,
-            })}
-          `}<br/>
-          Priority: {task.priority}<br/>
-          Description: {task.description}
-        </p>
-        <button className="taskButton markComplete">Mark as Complete</button>
-        <button className="taskButton editTask">Edit Task</button>
-      </div>
-    )
+  editTask = (task) => {
+    this.setState({selectedTask: task, editTaskOpen: true});
+  }
+
+  render() {
+    const {createTaskOpen, editTaskOpen, tasks, listDate, userName, selectedTask} = this.state;
+    const justListDate = new Date(listDate);
+    justListDate.setUTCHours(0, 0, 0, 0);
+
+    const taskDivs = tasks.map((task) => { // Box for each task in the list
+      const complete = task.completedDates.find(day => day === justListDate.toJSON());
+      return (
+        <div className="task">
+          <p className="taskInfo">
+            <b className="taskTitle">{complete ? "[Complete]" : ""} {task.name}</b><br/>
+            {`
+              ${new Date(task.startBy).toLocaleTimeString('en-US', {
+                hour: 'numeric',
+                minute: '2-digit',
+                hour12: true,
+              })} - ${new Date(task.completeBy).toLocaleTimeString('en-US', {
+                hour: 'numeric',
+                minute: '2-digit',
+                hour12: true,
+              })}
+            `}<br/>
+            Priority: {task.priority}<br/>
+            Description: {task.description}
+          </p>
+          <button className="taskButton markComplete" onClick={() => this.markComplete(task)}>{complete ? "Mark as Incomplete" : "Mark as Complete"}</button>
+          <button className="taskButton editTask" onClick={() => this.editTask(task)}>Edit Task</button>
+        </div>
+      )
+    });
 
     const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
     const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
@@ -152,7 +189,8 @@ class TaskScreen extends React.Component {
           </div>
         </div>
         {createTaskOpen && <CreateTask closeWindow={this.closeWindow}/>}
-        {createTaskOpen && <div className="focus"/>}
+        {editTaskOpen && <EditTask task={selectedTask} closeWindow={this.closeWindow}/>}
+        {(createTaskOpen || editTaskOpen) && <div className="focus"/>}
       </div>
     )
   }
