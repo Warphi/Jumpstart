@@ -112,7 +112,8 @@ router.get('/verify/:token', async (req, res) => {
         user.verificationToken = undefined;
         await user.save();
 
-        res.status(200).json({ message: 'Email verified successfully! '}); // 200 is OK
+        const token = jwt.sign({ userId: user._id }, process.env.TOKEN_SECRET, {expiresIn: '1d'}); // grant the user a token valid for one day
+        res.json({ token });
     } catch (err) {
         res.status(500).json({ error: 'Failed to verify email.' }); // 500 is internal server error
     }

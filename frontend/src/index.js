@@ -5,6 +5,8 @@ import './index.css';
 import Register from './Register';
 import TaskScreen from './TaskScreen';
 import Login from './Login';
+import AwaitVerification from './AwaitVerification';
+import Verification from './Verification';
 import reportWebVitals from './reportWebVitals';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -18,6 +20,8 @@ root.render(
         <Route path="/register" element={<Register />}/>
         <Route path="/app" element={<TaskScreen />}/>
         <Route index element={<Login />}/>
+        <Route path="/awaitverification" element={<AwaitVerification />}/>
+        <Route path="/verify/:token" element={<Verification />}/>
       </Routes>
     </BrowserRouter>
   </React.StrictMode>

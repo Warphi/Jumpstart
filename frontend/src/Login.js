@@ -1,5 +1,5 @@
 import logo from './images/Jumpstart_logo.png';
-import { data, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import React from 'react';
 import './Register.css';
 
