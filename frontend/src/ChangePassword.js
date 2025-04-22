@@ -42,6 +42,25 @@ class ChangePassword extends React.Component {
     });
 
     if (errorFound) this.forceUpdate(); // Render page so that errors appear (if any)
+    else {
+      fetch(`http://localhost:5000/auth/reset-password/${this.props.params.token}`, { // Make call to backend for changing password
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          password: fields.password.value,
+        }),
+      }).then(response => {
+        if (!response.ok) {
+          return response.json().then(data => {
+            this.setState({apiError: data.error});
+          });
+        }
+        this.props.navigate("/passwordchangesuccess");
+        return response.json();
+      });
+    }
   }
 
   logoPress = () => {

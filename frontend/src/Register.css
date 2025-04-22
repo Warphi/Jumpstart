@@ -17,7 +17,7 @@
 }
 
 .forgotPassword {
-  height: 400px;
+  height: 405px;
   padding-top: 35px;
 }
 
@@ -27,6 +27,10 @@
 }
 
 .awaitVerification {
+  height: 150px;
+}
+
+.passwordChangeSuccess {
   height: 150px;
 }
 
@@ -130,4 +134,9 @@ input {
   display: flex;
   align-items: center;
   height: 100%;
+}
+
+.passwordChangeSuccessText {
+  margin-top: 30px;
+  margin-bottom: 15px;
 }
