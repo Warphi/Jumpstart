@@ -7,6 +7,8 @@ import TaskScreen from './TaskScreen';
 import Login from './Login';
 import ForgotPassword from './ForgotPassword';
 import ChangePassword from './ChangePassword';
+import AwaitPasswordChange from './AwaitPasswordChange';
+import PasswordChangeSuccess from './PasswordChangeSuccess';
 import AwaitVerification from './AwaitVerification';
 import Verification from './Verification';
 import Statistics from './Statistics';
@@ -24,10 +26,12 @@ root.render(
         <Route path="/app" element={<TaskScreen />}/>
         <Route index element={<Login />}/>
         <Route path="/forgotpassword" element={<ForgotPassword />}/>
-        <Route path="/changepassword/:auth" element={<ChangePassword />}/>
+        <Route path="/reset/:token" element={<ChangePassword />}/>
         <Route path="/awaitverification" element={<AwaitVerification />}/>
+        <Route path="/awaitpasswordchange" element={<AwaitPasswordChange />}/>
         <Route path="/verify/:token" element={<Verification />}/>
         <Route path="/statistics" element={<Statistics />}/>
+        <Route path="/passwordchangesuccess" element={<PasswordChangeSuccess />}/>
       </Routes>
     </BrowserRouter>
   </React.StrictMode>
