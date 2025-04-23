@@ -1,0 +1,16 @@
+{
+  "files": {
+    "main.css": "/Jumpstart/static/css/main.37b0567c.css",
+    "main.js": "/Jumpstart/static/js/main.fbb115e8.js",
+    "static/js/453.5295ea1a.chunk.js": "/Jumpstart/static/js/453.5295ea1a.chunk.js",
+    "static/media/Jumpstart_logo.png": "/Jumpstart/static/media/Jumpstart_logo.e4c367784ba4a1bd803b.png",
+    "index.html": "/Jumpstart/index.html",
+    "main.37b0567c.css.map": "/Jumpstart/static/css/main.37b0567c.css.map",
+    "main.fbb115e8.js.map": "/Jumpstart/static/js/main.fbb115e8.js.map",
+    "453.5295ea1a.chunk.js.map": "/Jumpstart/static/js/453.5295ea1a.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.37b0567c.css",
+    "static/js/main.fbb115e8.js"
+  ]
+}
