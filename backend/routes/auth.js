@@ -37,7 +37,7 @@ router.post('/register', async (req, res) => {
         const verificationToken = crypto.randomBytes(32).toString('hex'); // creating a new email verify token
         const verifyURL = `http://localhost:3000/verify/${verificationToken}`;
         await transporter.sendMail({
-            from: `Jumpstart App <postmaster@${process.env.EMAIL_USER}>`,
+            from: `Jumpstart App <noreply@jumpstart.warphi.com>`,
             to: email,
             subject: 'Verify your email',
             html: `<p>Click <a href="${verifyURL}">here</a> to verify your account.</p>`
@@ -135,7 +135,7 @@ router.post('/forgot-password', async (req, res) => {
         const resetLink = `http://localhost:3000/reset/${resetToken}`;
 
         await transporter.sendMail({
-            from: `Jumpstart App <postmaster@${process.env.EMAIL_USER}>`,
+            from: `Jumpstart App <noreply@jumpstart.warphi.com>`,
             to: email,
             subject: 'Password Reset Request',
             html: `<p>Click <a href="${resetLink}">here</a> to reset your password. This link is valid for 1 hour.</p>`
